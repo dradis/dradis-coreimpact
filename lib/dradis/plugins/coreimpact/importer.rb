@@ -8,18 +8,53 @@ module Dradis::Plugins::Coreimpact
       file_content = File.read( params[:file] )
 
       # Parse the uploaded file into a Ruby Hash
-      logger.info { "Parsing CORE Impact output file..." }
+      logger.info { "Parsing CORE Impact output file... #{params[:file]}" }
       @doc = Nokogiri::XML( file_content )
       logger.info { 'Done.' }
 
-      unless @doc.xpath('/entities').empty?
+      if @doc.xpath('/entities').empty?
         logger.error "ERROR: no '<entities>' root element present in the provided "\
                      "data. Are you sure you uploaded a CORE Impact file?"
         return false
       end
 
-      @doc.xpath('/entitties/entity').each do |xml_entity|
-        # magic...
+      @doc.xpath('/entities/entity[@class="host"]').each do |xml_entity|
+        add_host(xml_entity)
+      end
+    end
+
+    private
+    def add_host(xml_entity)
+      label = xml_entity.at_xpath('./property[@key="display_name"]').text
+      node  = content_service.create_node(label: label)
+
+      logger.info{ "\tHost: #{label}" }
+      logger.info{ "\t\t#{xml_entity.at_xpath('./property[@key="ip"]').text}"}
+      logger.info{ "\t\t#{xml_entity.at_xpath('./property[@type="os"]/property[@key="entity name"]').text}"}
+
+      node.set_property(:ip, xml_entity.at_xpath('./property[@key="ip"]').text)
+      node.set_property(:os, xml_entity.at_xpath('./property[@type="os"]/property[@key="entity name"]').text)
+
+      # port and service info
+      add_ports(xml_entity, node)
+
+      # vulns and exposures
+
+      node.save
+    end
+
+    def add_ports(xml_entity, node)
+      xml_entity.xpath('./property[@type="ports"]').each do |xml_ports|
+        protocol = xml_ports['key'].split('_').first
+
+        xml_ports.xpath('./property[@type="port"]').each do |xml_port|
+          node.set_service(
+            port: xml_port['key'],
+            protocol: protocol,
+            source: :coreimpact,
+            state: (xml_port.text == 'listen') ? :open : xml_port.text
+          )
+        end
       end
     end
   end
