@@ -7,7 +7,7 @@ module Dradis::Plugins::Coreimpact
 
       file_content = File.read( params[:file] )
 
-      # Parse the uploaded file into a Ruby Hash
+      # Parse the uploaded file XML
       logger.info { "Parsing CORE Impact output file... #{params[:file]}" }
       @doc = Nokogiri::XML( file_content )
       logger.info { 'Done.' }
@@ -26,7 +26,7 @@ module Dradis::Plugins::Coreimpact
     private
     def add_host(xml_entity)
       label = xml_entity.at_xpath('./property[@key="display_name"]').text
-      node  = content_service.create_node(label: label)
+      node  = content_service.create_node(label: label, type: :host)
 
       logger.info{ "\tHost: #{label}" }
       logger.info{ "\t\t#{xml_entity.at_xpath('./property[@key="ip"]').text}"}
@@ -39,6 +39,9 @@ module Dradis::Plugins::Coreimpact
       add_ports(xml_entity, node)
 
       # vulns and exposures
+      xml_entity.xpath('./property[@key="Vulnerabilities"]/property[@type="container"]').each do |xml_container|
+        add_vulnerability(xml_container, node)
+      end
 
       node.save
     end
@@ -56,6 +59,15 @@ module Dradis::Plugins::Coreimpact
           )
         end
       end
+    end
+
+    def add_vulnerability(xml_container, node)
+      plugin_id = xml_container['key']
+      issue_text = template_service.process_template(template: 'issue', data: xml_container)
+      issue = content_service.create_issue(text: issue_text, id: plugin_id)
+
+      evidence_content = template_service.process_template(template: 'evidence', data: xml_container)
+      content_service.create_evidence(issue: issue, node: node, content: evidence_content)
     end
   end
 end

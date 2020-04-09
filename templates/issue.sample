@@ -1,0 +1,30 @@
+<property type="container" key="BID-11604" readonly="0" eraseable="1" priority="0">
+  <property type="unicode" key="description" readonly="0" eraseable="1" priority="0">The remote web server supports the TRACE and/or TRACK methods. TRACE and TRACK are HTTP methods that are used to debug web server connections.
+</property>
+  <property type="string" key="implications" readonly="0" eraseable="1" priority="0"/>
+  <property type="unicode" key="references" readonly="0" eraseable="1" priority="0">https://www.cgisecurity.com/whitehat-mirror/WH-WhitePaper_XST_ebook.pdf
+
+
+http://www.apacheweek.com/issues/03-01-24
+
+
+https://download.oracle.com/sunalerts/1000718.1.html
+
+</property>
+  <property type="unicode" key="severity" readonly="0" eraseable="1" priority="0">2</property>
+  <property type="unicode" key="solution" readonly="0" eraseable="1" priority="0">Disable these methods. Refer to the plugin output for more information.
+</property>
+  <property type="unicode" key="summary" readonly="0" eraseable="1" priority="0">Debugging functions are enabled on the remote web server.</property>
+</property>
+<property type="container" key="BID-14473" readonly="0" eraseable="1" priority="0">
+  <property type="unicode" key="description" readonly="0" eraseable="1" priority="0">The remote host is running a web server that fails to adequately sanitize request strings of malicious JavaScript. A remote attacker can exploit this issue, via a specially crafted request, to execute arbitrary HTML and script code in a user's browser within the security context of the affected site.
+</property>
+  <property type="string" key="implications" readonly="0" eraseable="1" priority="0"/>
+  <property type="unicode" key="references" readonly="0" eraseable="1" priority="0">https://en.wikipedia.org/wiki/Cross-site_scripting
+
+</property>
+  <property type="unicode" key="severity" readonly="0" eraseable="1" priority="0">2</property>
+  <property type="unicode" key="solution" readonly="0" eraseable="1" priority="0">Contact the vendor for a patch or upgrade.
+</property>
+  <property type="unicode" key="summary" readonly="0" eraseable="1" priority="0">The remote web server is affected by a cross-site scripting vulnerability.</property>
+</property>

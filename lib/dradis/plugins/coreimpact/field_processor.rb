@@ -2,18 +2,19 @@ module Dradis
   module Plugins
     module Coreimpact
       class FieldProcessor < Dradis::Plugins::Upload::FieldProcessor
-        # No need to implement anything here
-        # def post_initialize(args={})
-        # end
+
+        def post_initialize(args={})
+          @core_vuln = ::Coreimpact::Vulnerability.new(data)
+        end
 
         def value(args={})
           field = args[:field]
 
           # fields in the template are of the form <foo>.<field>, where <foo>
           # is common across all fields for a given template (and meaningless).
-          type, name, attribute = field.split('.')
+          _, name = field.split('.')
 
-          @data.key?(name) ? @data[name] : 'n/a'
+          @core_vuln.try(name) || 'n/a'
         end
       end
     end

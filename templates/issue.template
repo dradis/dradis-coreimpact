@@ -1,0 +1,14 @@
+#[Title]#
+%issue.summary%
+
+#[Severity]#
+%issue.severity%
+
+#[Description]#
+%issue.description%
+
+#[Solution]#
+%issue.solution%
+
+#[References]#
+%issue.references%
