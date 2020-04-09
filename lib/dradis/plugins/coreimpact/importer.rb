@@ -39,7 +39,7 @@ module Dradis::Plugins::Coreimpact
       add_ports(xml_entity, node)
 
       # vulns and exposures
-      xml_entity.xpath('./property[@key="Vulnerabilities"]/property[@type="container"]').each do |xml_container|
+      xml_entity.xpath('.//property[@key="Vulnerabilities"]/property[@type="container"]').each do |xml_container|
         add_vulnerability(xml_container, node)
       end
 
