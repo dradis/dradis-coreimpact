@@ -37,20 +37,24 @@ module Dradis::Plugins::Coreimpact
 
       # port and service info
       add_ports(xml_entity, node)
+      add_services(xml_entity, node)
 
       # vulns and exposures
       xml_entity.xpath('.//property[@key="Vulnerabilities"]/property[@type="container"]').each do |xml_container|
         add_vulnerability(xml_container, node)
       end
-
-      node.save
     end
 
     def add_ports(xml_entity, node)
+      logger.info{ "\t\tPorts:"}
+
       xml_entity.xpath('./property[@type="ports"]').each do |xml_ports|
         protocol = xml_ports['key'].split('_').first
 
         xml_ports.xpath('./property[@type="port"]').each do |xml_port|
+
+          logger.info{ "\t\t\t#{protocol}/#{xml_port['key']}"}
+
           node.set_service(
             port: xml_port['key'],
             protocol: protocol,
@@ -59,6 +63,38 @@ module Dradis::Plugins::Coreimpact
           )
         end
       end
+
+      # Save node properties
+      node.save
+    end
+
+    def add_services(xml_entity, node)
+      logger.info{ "\t\tServices:"}
+
+      xml_entity.xpath('./property[@key="services"]').each do |xml_services|
+
+        xml_services.xpath('./property').each do |xml_container|
+
+          name = xml_container['key']
+
+          # Each service container can have multiple ports/protocols.
+          xml_container.xpath('./property').each do |xml_service|
+
+            port, protocol = xml_service['key'].split('-')
+
+            logger.info{ "\t\t\t#{protocol}/#{port} - #{name}"}
+
+            node.set_service(
+              name: name,
+              port: port,
+              protocol: protocol,
+              source: :coreimpact
+            )
+          end
+        end
+      end
+      # Save node properties
+      node.save
     end
 
     def add_vulnerability(xml_container, node)
