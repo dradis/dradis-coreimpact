@@ -1,14 +1,8 @@
 #[Title]#
-%issue.summary%
+%issue.title%
 
-#[Severity]#
-%issue.severity%
+#[CVE]#
+%issue.cve%
 
 #[Description]#
 %issue.description%
-
-#[Solution]#
-%issue.solution%
-
-#[References]#
-%issue.references%

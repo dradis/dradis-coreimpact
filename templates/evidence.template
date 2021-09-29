@@ -1,1 +1,8 @@
-n/a
+#[AgentDeployed]#
+%evidence.agent_deployed%
+
+#[TriedToInstallAgent]#
+%evidence.tried_to_install_agent%
+
+#[Port]#
+%evidence.port%
