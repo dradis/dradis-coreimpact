@@ -5,4 +5,5 @@ require 'dradis-plugins'
 require 'dradis/plugins/coreimpact'
 
 # Require supporting CORE Impact library
+require 'coreimpact/module'
 require 'coreimpact/vulnerability'

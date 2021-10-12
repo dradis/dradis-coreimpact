@@ -40,7 +40,7 @@ module Dradis::Plugins::Coreimpact
       add_services(xml_entity, node)
 
       # vulns and exposures
-      xml_entity.xpath('.//property[@key="Vulnerabilities"]/property[@type="container"]').each do |xml_container|
+      xml_entity.xpath('.//property[@key="Vulnerabilities"]').each do |xml_container|
         add_vulnerability(xml_container, node)
       end
     end
@@ -98,12 +98,17 @@ module Dradis::Plugins::Coreimpact
     end
 
     def add_vulnerability(xml_container, node)
-      plugin_id = xml_container['key']
-      issue_text = template_service.process_template(template: 'issue', data: xml_container)
-      issue = content_service.create_issue(text: issue_text, id: plugin_id)
+      plugin_id = xml_container.first_element_child['key']
 
-      evidence_content = template_service.process_template(template: 'evidence', data: xml_container)
-      content_service.create_evidence(issue: issue, node: node, content: evidence_content)
+      issue_text = template_service.process_template(data: xml_container, template: 'issue')
+      issue = content_service.create_issue(id: plugin_id, text: issue_text)
+
+      evidence_content = template_service.process_template(
+        data: xml_container.at_xpath('//property[@key="Modules"]'),
+        template: 'evidence'
+      )
+
+      content_service.create_evidence(content: evidence_content, issue: issue, node: node)
     end
   end
 end
