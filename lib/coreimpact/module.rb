@@ -40,7 +40,7 @@ module Coreimpact
         return
       end
 
-      @xml.at_xpath("//property[@key='#{method}']").text || 'n/a'
+      @xml.at_xpath("./property[@type='container']/property[@key='#{method}']").text || 'n/a'
     end
   end
 end

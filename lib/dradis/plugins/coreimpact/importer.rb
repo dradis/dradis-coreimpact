@@ -98,13 +98,13 @@ module Dradis::Plugins::Coreimpact
     end
 
     def add_vulnerability(xml_container, node)
-      plugin_id = xml_container.first_element_child['key']
+      plugin_id = xml_container.at_xpath('./property[@type="container"]')['key']
 
       issue_text = template_service.process_template(data: xml_container, template: 'issue')
       issue = content_service.create_issue(id: plugin_id, text: issue_text)
 
       evidence_content = template_service.process_template(
-        data: xml_container.at_xpath('//property[@key="Modules"]'),
+        data: xml_container.at_xpath('./property[@type="container"]/property[@key="Modules"]'),
         template: 'evidence'
       )
 
