@@ -1,18 +1,13 @@
 module Coreimpact
   class Module
-    # Accepts an XML node from Nokogiri::XML.
     def initialize(xml_module)
       @xml = xml_module
     end
 
-    # List of supported tags. They can be attributes, simple descendans or
-    # collections (e.g. <bid/>, <cve/>, <xref/>)
     def supported_fields
       [:agent_deployed, :port, :tried_to_install_agent]
     end
 
-    # This allows external callers (and specs) to check for implemented
-    # properties
     def respond_to?(method, include_private = false)
       return true if supported_fields.include?(method.to_sym)
 
