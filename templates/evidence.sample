@@ -1,0 +1,8 @@
+<property type="container" key="Modules" readonly="0" eraseable="1" priority="0">
+  <property type="container" key="Issue Title">
+    <property type="bool" key="agent_deployed">false</property>
+    <property type="string" key="description">Issue Description</property>
+    <property type="string" key="port">443</property>
+    <property type="bool" key="tried_to_install_agent">false</property>
+  </property>
+</property>
