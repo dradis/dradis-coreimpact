@@ -4,8 +4,8 @@
 #[Description]#
 %evidence.description%
 
-#[TriedToInstallAgent]#
-%evidence.tried_to_install_agent%
-
 #[Port]#
 %evidence.port%
+
+#[TriedToInstallAgent]#
+%evidence.tried_to_install_agent%
