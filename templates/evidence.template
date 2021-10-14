@@ -1,6 +1,9 @@
 #[AgentDeployed]#
 %evidence.agent_deployed%
 
+#[Description]#
+%evidence.description%
+
 #[TriedToInstallAgent]#
 %evidence.tried_to_install_agent%
 

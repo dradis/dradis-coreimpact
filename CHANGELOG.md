@@ -1,12 +1,2 @@
 v4.1.0 ([month] [YYYY])
   - Initial release
-  - Upgraded gems:
-    - [gem]
-  - Bugs fixes:
-    - [future tense verb] [bug fix]
-    - Bug tracker items:
-      - [item]
-  - Security Fixes:
-    - High: (Authenticated|Unauthenticated) (admin|author|contributor) [vulnerability description]
-    - Medium: (Authenticated|Unauthenticated) (admin|author|contributor) [vulnerability description]
-    - Low: (Authenticated|Unauthenticated) (admin|author|contributor) [vulnerability description]

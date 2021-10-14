@@ -4,12 +4,12 @@ module Coreimpact
       @xml = xml_module
     end
 
-    def supported_fields
-      [:agent_deployed, :port, :tried_to_install_agent]
+    def supported_tags
+      [:agent_deployed, :description, :port, :tried_to_install_agent]
     end
 
     def respond_to?(method, include_private = false)
-      return true if supported_fields.include?(method.to_sym)
+      return true if supported_tags.include?(method.to_sym)
 
       super
     end
@@ -30,7 +30,7 @@ module Coreimpact
       # The problem would be that it would make tricky to debug problems with
       # typos. For instance: <>.potr would return nil instead of raising an
       # exception
-      unless supported_fields.include?(method)
+      unless supported_tags.include?(method)
         super
         return
       end
