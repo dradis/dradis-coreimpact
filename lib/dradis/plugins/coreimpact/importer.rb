@@ -28,9 +28,7 @@ module Dradis::Plugins::Coreimpact
       label = xml_entity.at_xpath('./property[@key="display_name"]').text
       node  = content_service.create_node(label: label, type: :host)
 
-      logger.info{ "\tHost: #{label}" }
-      logger.info{ "\t\t#{xml_entity.at_xpath('./property[@key="ip"]').text}"}
-      logger.info{ "\t\t#{xml_entity.at_xpath('./property[@type="os"]/property[@key="entity name"]').text}"}
+      logger.info{ "\tNew Host: #{label}" }
 
       node.set_property(:ip, xml_entity.at_xpath('./property[@key="ip"]').text)
       node.set_property(:os, xml_entity.at_xpath('./property[@type="os"]/property[@key="entity name"]').text)
@@ -46,14 +44,12 @@ module Dradis::Plugins::Coreimpact
     end
 
     def add_ports(xml_entity, node)
-      logger.info{ "\t\tPorts:"}
-
       xml_entity.xpath('./property[@type="ports"]').each do |xml_ports|
         protocol = xml_ports['key'].split('_').first
 
         xml_ports.xpath('./property[@type="port"]').each do |xml_port|
 
-          logger.info{ "\t\t\t#{protocol}/#{xml_port['key']}"}
+          logger.info{ "\t\tNew Port: #{protocol}/#{xml_port['key']}"}
 
           node.set_service(
             port: xml_port['key'],
@@ -69,8 +65,6 @@ module Dradis::Plugins::Coreimpact
     end
 
     def add_services(xml_entity, node)
-      logger.info{ "\t\tServices:"}
-
       xml_entity.xpath('./property[@key="services"]').each do |xml_services|
 
         xml_services.xpath('./property').each do |xml_container|
@@ -82,7 +76,7 @@ module Dradis::Plugins::Coreimpact
 
             port, protocol = xml_service['key'].split('-')
 
-            logger.info{ "\t\t\t#{protocol}/#{port} - #{name}"}
+            logger.info{ "\t\tNew Service: #{protocol}/#{port} - #{name}"}
 
             node.set_service(
               name: name,
@@ -102,13 +96,17 @@ module Dradis::Plugins::Coreimpact
 
       issue_text = template_service.process_template(data: xml_container, template: 'issue')
       issue = content_service.create_issue(id: plugin_id, text: issue_text)
+      logger.info{ "\tCreating new issue (plugin_id: #{plugin_id})"}
 
       evidence_content = template_service.process_template(
         data: xml_container.at_xpath('./property[@type="container"]/property[@key="Modules"]'),
         template: 'evidence'
       )
-
       content_service.create_evidence(content: evidence_content, issue: issue, node: node)
+      logger.info{ "\t\tAdding reference to this host"}
+
+
+
     end
   end
 end
