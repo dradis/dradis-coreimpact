@@ -1,3 +1,2 @@
-## Dradis Framework 3.17 (XXXX, 20XX) ##
-
-*   Initial release
+v4.1.0 ([month] [YYYY])
+  - Initial release

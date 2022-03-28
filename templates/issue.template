@@ -1,14 +1,17 @@
 #[Title]#
-%issue.summary%
+%issue.title%
 
-#[Severity]#
-%issue.severity%
+#[AgentDeployed]#
+%issue.agent_deployed%
+
+#[CVE]#
+%issue.cve%
 
 #[Description]#
 %issue.description%
 
-#[Solution]#
-%issue.solution%
+#[Port]#
+%issue.port%
 
-#[References]#
-%issue.references%
+#[TriedToInstallAgent]#
+%issue.tried_to_install_agent%
