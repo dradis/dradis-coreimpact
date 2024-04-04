@@ -16,5 +16,22 @@ module Dradis::Plugins::Coreimpact
         'TriedToInstallAgent' => '{{ coreimpact[issue.tried_to_install_agent] }}'
       }
     }.freeze
+
+    SOURCE_FIELDS = {
+      evidence: [
+        'evidence.agent_deployed',
+        'evidence.description',
+        'evidence.tried_to_install_agent',
+        'evidence.port'
+      ],
+      issue: [
+        'issue.title',
+        'issue.agent_deployed',
+        'issue.cve',
+        'issue.description',
+        'issue.port',
+        'issue.tried_to_install_agent'
+      ]
+    }.freeze
   end
 end
