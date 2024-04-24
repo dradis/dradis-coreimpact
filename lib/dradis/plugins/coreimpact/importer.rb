@@ -94,13 +94,13 @@ module Dradis::Plugins::Coreimpact
     def add_vulnerability(xml_container, node)
       plugin_id = xml_container.at_xpath('./property[@type="container"]')['key']
 
-      issue_text = template_service.process_template(data: xml_container, template: 'issue')
+      issue_text = mapping_service.apply_mapping(source: 'issue', data: xml_container)
       issue = content_service.create_issue(id: plugin_id, text: issue_text)
       logger.info{ "\tCreating new issue (plugin_id: #{plugin_id})"}
 
-      evidence_content = template_service.process_template(
-        data: xml_container.at_xpath('./property[@type="container"]/property[@key="Modules"]'),
-        template: 'evidence'
+      evidence_content = mapping_service.apply_mapping(
+        source: 'evidence',
+        data: xml_container.at_xpath('./property[@type="container"]/property[@key="Modules"]')
       )
       content_service.create_evidence(content: evidence_content, issue: issue, node: node)
       logger.info{ "\t\tAdding reference to this host"}
